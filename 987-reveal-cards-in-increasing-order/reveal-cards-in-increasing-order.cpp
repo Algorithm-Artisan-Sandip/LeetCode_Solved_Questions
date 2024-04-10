@@ -1,28 +1,26 @@
 class Solution {
 public:
     vector<int> deckRevealedIncreasing(vector<int>& deck) {
-        // Sort the deck in descending order
-        sort(rbegin(deck), rend(deck)); // Initialize a deque to simulate the card revealing process
-        deque<int> dq; // Number of cards in the deck
-        int n = deck.size(); // Initialize deque with the largest card
-        dq.push_front(deck[0]); // Simulate the revealing process
-        for(int i = 1; i < n; i++) {
-            // Take the top card from the back of the deque
-            int x = dq.back();
-            // Remove this card from the deque
-            dq.pop_back();
-            // Place this revealed card at the front of the deque
-            dq.push_front(x);
-            // Add the current card from the sorted deck to the front of the deque
-            dq.push_front(deck[i]);
+        sort(deck.begin(), deck.end()); // Sort the deck in increasing order
+        
+        int n = deck.size();
+        vector<int> result(n);
+        deque<int> indices;
+        
+        for (int i = 0; i < n; i++) {
+            indices.push_back(i); // Initialize deque with indices 0, 1, 2, ..., n-1
         }
-        // Retrieve the revealed cards in increasing order
-        vector<int> ans;
-        while(!dq.empty()) {
-            ans.push_back(dq.front());
-            dq.pop_front();
+        
+        for (int card : deck) {
+            int idx = indices.front(); // Get the next available index
+            indices.pop_front(); // Remove the index from the front
+            result[idx] = card; // Place the card in the result array
+            if (!indices.empty()) {
+                indices.push_back(indices.front()); // Move the used index to the end of deque
+                indices.pop_front(); // Remove the index from the front
+            }
         }
-        // Return the ordered deck
-        return ans;
+        
+        return result;
     }
 };
