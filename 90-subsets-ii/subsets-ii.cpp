@@ -1,6 +1,6 @@
 class Solution {
 private:
-    void findAns(int idx, int n, vector<int> ans, vector<vector<int>>& finalAns, vector<int>& arr) {
+    void findAns(int idx, int n, vector<int>& ans, vector<vector<int>>& finalAns, vector<int>& arr) {
         finalAns.push_back(ans);
         for(int i=idx; i<n; i++) {
             if(i>idx && arr[i] == arr[i-1]) continue;
