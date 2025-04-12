@@ -1,21 +1,22 @@
 class Solution {
+private:
+    void findSubsets(int idx, int n, vector<int> ans, vector<vector<int>>&  finalAns, vector<int> arr) {
+        if(idx == n) {
+            finalAns.push_back(ans);
+            return;
+        }
+        // take : 
+        ans.push_back(arr[idx]);
+        findSubsets(idx+1, n, ans, finalAns, arr);
+        // not take : 
+        ans.pop_back();
+        findSubsets(idx+1, n, ans, finalAns, arr);
+    }
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
-        vector<vector<int>> result;
-        vector<int> cur;
-
-        function<void(int)> explore = [&](int index) {
-            if (index == nums.size()) {
-                result.push_back(cur);
-                return;
-            }
-            cur.push_back(nums[index]);
-            explore(index + 1);
-            cur.pop_back();
-            explore(index + 1);
-        };
-
-        explore(0);
-        return result;
+        vector<int> ans;
+        vector<vector<int>> finalAns;
+        findSubsets(0, nums.size(), ans, finalAns, nums);
+        return finalAns;
     }
 };
