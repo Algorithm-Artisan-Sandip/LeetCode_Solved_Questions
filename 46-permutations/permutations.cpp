@@ -1,27 +1,20 @@
 class Solution {
 private:
-    void findAns(vector<int>& ans, vector<vector<int>>& finalAns, vector<int>& nums, unordered_map<int, int> freq) {
-        if(ans.size() == nums.size()) {
-            finalAns.push_back(ans);
+    void findAns(int idx, vector<vector<int>>& finalAns, vector<int>& nums) {
+        if(idx == nums.size()) {
+            finalAns.push_back(nums);
             return;
         }
-        for(int i=0; i<nums.size(); i++) {
-            if(!freq[nums[i]]) {
-                ans.push_back(nums[i]);
-                freq[nums[i]] = 1;
-                findAns(ans, finalAns, nums, freq);
-                freq[nums[i]] = 0;
-                ans.pop_back(); 
-            }
+        for(int i=idx; i<nums.size(); i++){
+            swap(nums[idx], nums[i]);
+            findAns(idx+1, finalAns, nums);
+            swap(nums[idx], nums[i]);
         }
     }
-
 public:
     vector<vector<int>> permute(vector<int>& nums) {
-        vector<int> ans;
         vector<vector<int>> finalAns;
-        unordered_map<int, int> freq;
-        findAns(ans, finalAns, nums, freq);
+        findAns(0, finalAns, nums);
         return finalAns;
     }
 };
