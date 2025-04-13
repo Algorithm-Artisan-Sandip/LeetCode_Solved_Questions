@@ -1,22 +1,22 @@
 class Solution {
 private:
-    void allPermute(vector<int>& nums, vector<vector<int>>& ans, int idx) {
-        if(idx>=nums.size()) {
-            ans.push_back(nums);
+    void findAns(int idx, set<vector<int>>& ans, vector<int>& nums) {
+        if(idx == nums.size()) {
+            ans.insert(nums);
             return;
         }
         for(int i=idx; i<nums.size(); i++) {
-            swap(nums[i],nums[idx]);
-            allPermute(nums,ans,idx+1);
-            swap(nums[i],nums[idx]);
+            swap(nums[idx], nums[i]);
+            findAns(idx+1, ans, nums);
+            swap(nums[idx], nums[i]);
         }
     }
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        vector<vector<int>> ans;
-        allPermute(nums,ans,0);
-        sort(ans.begin(),ans.end());
-        ans.erase(unique(ans.begin(),ans.end()),ans.end());
-        return ans;
+        sort(nums.begin(), nums.end());
+        set<vector<int>> ans;
+        findAns(0, ans, nums);
+        vector<vector<int>> finalAns(ans.begin(), ans.end());
+        return finalAns;
     }
 };
