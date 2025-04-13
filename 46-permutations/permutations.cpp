@@ -6,9 +6,9 @@ private:
             return;
         }
         for(int i=idx; i<nums.size(); i++){
-            swap(nums[idx], nums[i]);
+            if(i!=idx) swap(nums[idx], nums[i]);  // slight improvement : not swapping an element with itself.
             findAns(idx+1, finalAns, nums);
-            swap(nums[idx], nums[i]);
+            if(i!=idx) swap(nums[idx], nums[i]);
         }
     }
 public:
