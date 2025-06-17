@@ -1,26 +1,24 @@
-// Approach 1 : T.C: O(2*n^2) , S.C: O(2*n)
+// Approach 2 : Optimized : T.C: O(n+m), S.C: O(3*n)
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> nge;
+        unordered_map<int, int> mp;
         vector<int> ans;
-        for(int i=0; i<nums2.size(); i++) {
-            bool flag = true;
-            for(int j=i+1; j<nums2.size(); j++) {
-                if(nums2[i] < nums2[j]) {
-                    nge.push_back(nums2[j]);
-                    flag = false;
-                    break;
-                }
+        stack<int> st;
+        st.push(-1);
+        
+        // populating the map : 
+        for(int i=nums2.size()-1; i>=0; i--) {
+            while(st.top()<=nums2[i] && st.top()!=-1) {
+                st.pop();
             }
-            if(flag) nge.push_back(-1);
+            mp[nums2[i]] = st.top();
+            st.push(nums2[i]);
         }
+
+        // finding the answer vector : 
         for(int i=0; i<nums1.size(); i++) {
-            for(int j=0; j<nums2.size(); j++) {
-                if(nums1[i] == nums2[j]) {
-                    ans.push_back(nge[j]);
-                }
-            }
+            ans.push_back(mp[nums1[i]]);
         }
         return ans;
     }
