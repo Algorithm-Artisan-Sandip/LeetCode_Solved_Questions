@@ -1,14 +1,13 @@
+// Optimized Approach : T.C: O(n), S.C: O(1)
 class Solution {
 public:
     int maxArea(vector<int>& height) {
-        int i=0, j=height.size()-1;
-        int maxArea = min(height[i],height[j])*(j-i);
-        while(i<j) {
-            if(height[i]>height[j]) j--;
-            else i++;
-            int newArea = min(height[i],height[j])*(j-i);
-            if(maxArea<newArea) maxArea = newArea;
+        int maxWater = 0;
+        int l = 0, r = height.size()-1;
+        while(l<r) {
+            maxWater = max(maxWater, (r-l)*min(height[l], height[r]));
+            height[r] > height[l] ? l++ : r--;
         }
-        return maxArea;
+        return maxWater;
     }
 };
