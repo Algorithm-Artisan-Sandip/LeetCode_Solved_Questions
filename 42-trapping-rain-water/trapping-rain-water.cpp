@@ -1,27 +1,21 @@
-// Approach 1 : T.C: O(n), S.C: O(3*n)
+// Approach 3 : Optimized : T.C: O(n), S.C: O(1)
 class Solution {
-private:
-    void suffMax(vector<int>& suffixMax, vector<int>& height) {
-        int size = height.size();
-        suffixMax[size-1] = height[size-1];
-        for(int i=size-2; i>=0; i--) {
-            suffixMax[i] = max(suffixMax[i+1], height[i]);
-        }
-    }
 public:
     int trap(vector<int>& height) {
-        int size = height.size();
-        int leftMax = height[0];
-        vector<int> suffixMax(height.size());
-        int ans = 0;
-        suffMax(suffixMax, height);
-        for(int i=0; i<size; i++) {
-            int leftMax = max(height[i], leftMax);
-            int rightMax = suffixMax[i];
-            if(height[i] < leftMax && height[i] < rightMax) {
-                ans += min(leftMax, rightMax) - height[i];
+        int leftMax = 0, rightMax = 0, total = 0;
+        int l = 0, r = height.size()-1;
+        while(l < r) {
+            if(height[l] <= height[r]) {
+                if(leftMax > height[l]) total += leftMax-height[l];
+                else leftMax = height[l];
+                l++;
+            }
+            else {
+                if(rightMax > height[r]) total += rightMax-height[r];
+                else rightMax = height[r];
+                r--;
             }
         }
-        return ans;
+        return total;
     }
 };
