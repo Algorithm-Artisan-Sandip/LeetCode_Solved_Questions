@@ -1,36 +1,28 @@
-// Approach 1 : T.C: O(5n), S.C: O(4n)
+// optimal : T.C: O(n), S.C: O(n)
 class Solution {
-private:
-    void findPse(vector<int>& pse, vector<int>& heights, int size) {
-        stack<int> st;
-        for(int i=0; i<size; i++) {
-            while(!st.empty() && heights[st.top()] >= heights[i]) {
-                st.pop();
-            }
-            pse[i] = (st.empty()) ? -1 : st.top();
-            st.push(i);
-        }
-    }
-    void findNse(vector<int>& nse, vector<int>& heights, int size) {
-        stack<int> st;
-        for(int i=size-1; i>=0; i--) {
-            while(!st.empty() && heights[st.top()] >= heights[i]) {
-                st.pop();
-            }
-            nse[i] = (st.empty()) ? size : st.top();
-            st.push(i);
-        }
-    }
 public:
     int largestRectangleArea(vector<int>& heights) {
-        int size = heights.size();
-        vector<int> pse(size), nse(size);
-        findPse(pse, heights, size);
-        findNse(nse, heights, size);
-        int maxi = INT_MIN;
-        for(int i=0; i<size; i++) {
-            maxi = max(maxi, heights[i]*(nse[i]-pse[i]-1));
+        stack<int> st;
+        long long maxArea = 0;
+        for(int i=0; i<heights.size(); i++) {
+            while(!st.empty() && heights[st.top()] >= heights[i]) {
+                int poppedEl = heights[st.top()]; 
+                st.pop();
+                int pse = (st.empty()) ? -1 : st.top();  // the current top element is the previous smaller element of the popped element
+                int nse = i;  // the current element in the array is the next smaller element of the popped element
+                maxArea = max(maxArea, 1LL*poppedEl*(nse-pse-1));  // formula to find the max area
+            }
+            st.push(i);
         }
-        return maxi;
+
+        // if for any element there is no next smaller element then the stack stil has one or more elements
+        while(!st.empty()) {
+            int poppedEl = heights[st.top()];
+            st.pop();
+            int pse = (st.empty()) ? -1 : st.top();
+            int nse = heights.size();
+            maxArea = max(maxArea, 1LL*poppedEl*(nse-pse-1));
+        }
+        return maxArea;
     }
 };
