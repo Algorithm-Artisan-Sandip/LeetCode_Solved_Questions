@@ -10,55 +10,30 @@
  */
 class Solution {
 public:
-    int findLenOfLL(ListNode* head) {
-        ListNode* temp = head;
-        int count = 0;
-        while(temp != NULL) {
-            count++;
-            temp = temp->next;
-        }
-        return count;
-    }
-
-    ListNode* addTwoNum(ListNode* l1, ListNode* l2, int len1, int len2) {
-        ListNode* head = NULL;
-        ListNode* temp = nullptr;
-
-        ListNode* temp1 = (len1 >= len2) ? l1 : l2;
-        ListNode* temp2 = (len1 >= len2) ? l2 : l1;
-
-        int carry = 0;
-
-        while (temp1 != NULL) {
-            int val2 = (temp2 != NULL) ? temp2->val : 0;
-            int totalSum = temp1->val + val2 + carry;
-
-            ListNode* var = new ListNode(totalSum % 10);
-            carry = totalSum / 10;
-
-            if (head == NULL) {
-                head = var;
-                temp = head;
-            } else {
-                temp->next = var;
-                temp = temp->next;
-            }
-
-            if (temp1 != NULL) temp1 = temp1->next;
-            if (temp2 != NULL) temp2 = temp2->next;
-        }
-
-        // If carry is still left
-        if (carry > 0) {
-            temp->next = new ListNode(carry);
-        }
-        return head;
-    }
-
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        int length1 = findLenOfLL(l1);
-        int length2 = findLenOfLL(l2);
-        ListNode* head = addTwoNum(l1, l2, length1, length2);
+        // Dummy node : starting point of the result list
+        ListNode* dummy = new ListNode(0);
+        ListNode* curr = dummy;
+        int carry = 0;          
+        while (l1 || l2 || carry) {
+            int sum = carry;
+            // Add digit from l1 if available
+            if (l1) {
+                sum += l1->val;
+                l1 = l1->next;
+            }
+            // Add digit from l2 if available
+            if (l2) {
+                sum += l2->val;
+                l2 = l2->next;
+            }
+            carry = sum / 10;
+            curr->next = new ListNode(sum % 10);
+            curr = curr->next;
+        }
+        // Result list starts from dummy->next
+        ListNode* head = dummy->next;
+        delete dummy;
         return head;
     }
 };
