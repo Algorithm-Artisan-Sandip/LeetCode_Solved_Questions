@@ -9,17 +9,17 @@
  * };
  */
 class Solution {
-public:
+  private:
+    ListNode* findReverseLLHead(ListNode* head) {
+        if(head == nullptr || head->next == nullptr)
+            return head;
+        ListNode* newHead = findReverseLLHead(head->next);
+        head->next->next = head;
+        head->next = nullptr;
+        return newHead;
+    }
+  public:
     ListNode* reverseList(ListNode* head) {
-        ListNode* prev = NULL;
-        ListNode* curr = head;
-        while(curr != NULL) {
-            ListNode* temp = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = temp;
-        }
-        head = prev;
-        return head;
+        return findReverseLLHead(head);
     }
 };
