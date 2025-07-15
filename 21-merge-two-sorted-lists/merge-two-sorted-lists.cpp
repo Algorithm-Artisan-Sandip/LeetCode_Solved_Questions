@@ -10,45 +10,26 @@
  */
 class Solution {
 public:
-    void insertInAns(ListNode* &head, ListNode* &tail, int value) {
-        ListNode* newNode = new ListNode(value);
-        if (head == NULL) {
-            head = newNode;
-            tail = head;
-        } else {
-            tail->next = newNode;
-            tail = newNode;
-        }
-    }
-
-    ListNode* mergeLists(ListNode* l1, ListNode* l2) {
-        ListNode* head = NULL;
-        ListNode* tail = NULL;
-
-        while (l1 != NULL && l2 != NULL) {
-            if (l1->val <= l2->val) {
-                insertInAns(head, tail, l1->val);
-                l1 = l1->next;
-            } else {
-                insertInAns(head, tail, l2->val);
-                l2 = l2->next;
-            }
-        }
-
-        while (l1 != NULL) {
-            insertInAns(head, tail, l1->val);
-            l1 = l1->next;
-        }
-
-        while (l2 != NULL) {
-            insertInAns(head, tail, l2->val);
-            l2 = l2->next;
-        }
-
-        return head;
-    }
-
     ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-        return mergeLists(list1, list2);
+        ListNode* dummyHead = new ListNode(-1); // Dummy node
+        ListNode* tail = dummyHead;
+        // Traverse both lists until one is exhausted
+        while(list1 && list2) {
+            if(list1->val < list2->val) {
+                tail->next = list1;
+                list1 = list1->next;
+            } else {
+                tail->next = list2;
+                list2 = list2->next;
+            }
+            tail = tail->next;
+        }
+        // Attach remaining nodes of the non-empty list
+        if(list1) tail->next = list1;
+        if(list2) tail->next = list2;
+
+        ListNode* newHead = dummyHead->next;
+        delete dummyHead;
+        return newHead;
     }
 };
