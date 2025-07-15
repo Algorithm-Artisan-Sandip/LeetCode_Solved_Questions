@@ -9,47 +9,42 @@
  * };
  */
 class Solution {
-public:
-    void reverseLL(ListNode* &head) {
-        ListNode* curr = head;
-        ListNode* prev = NULL;
-        while(curr != NULL) {
-            ListNode* temp = curr->next;
+private:
+    ListNode* reverseLL(ListNode* newHead) {
+        ListNode* prev = nullptr;
+        ListNode* curr = newHead;
+        while(curr != nullptr) {
+            ListNode* nextToCurr = curr->next;
             curr->next = prev;
             prev = curr;
-            curr = temp;
+            curr = nextToCurr; 
         }
-        head = prev;
+        newHead = prev;
+        return newHead;
     }
-    ListNode* midOfLL(ListNode* head) {
-        ListNode* slow = head;
-        ListNode* fast = head->next;
-        int count = 0;
-        while(fast != NULL) {
-            fast = fast->next;
-            count++;
-            if(fast != NULL) {
-                fast = fast->next;
-                count++;
-                slow = slow->next;
-            }
-        }
-        return slow;
-    }
+public:
     bool isPalindrome(ListNode* head) {
-        ListNode* mid = midOfLL(head);
-        reverseLL(mid->next);
-        ListNode* temp1 = head;
-        ListNode* temp2 = mid->next;
-        bool flag = true;
-        while(temp2 != NULL) {
-            if(temp1->val != temp2->val) {
-                flag = false;
-                break;
-            }
-            temp1 = temp1->next;
-            temp2 = temp2->next;
+        ListNode* fast = head;
+        ListNode* slow = head;
+        // finding the middle of the linked list using slow and fast pointers
+        while(fast->next != nullptr && fast->next->next != nullptr) {
+            fast = fast->next->next;
+            slow = slow->next;
         }
-        return flag;
+        // reversing the second half of the list
+        ListNode* newHead = reverseLL(slow->next);
+        // comparing the first half and the reversed second half
+        ListNode* first = head;
+        ListNode* second = newHead;
+        while(second != nullptr) {
+            if(first->val != second->val) {
+                reverseLL(newHead);
+                return false;
+            }
+            first = first->next;
+            second = second->next;
+        }
+        reverseLL(newHead);
+        return true;
     }
 };
