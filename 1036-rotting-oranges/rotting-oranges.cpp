@@ -1,60 +1,67 @@
 class Solution {
-private:
-    int bfsHelper(int n, int m, vector<vector<int>> grid, queue<pair<pair<int,int>, int>>& q, vector<vector<int>>& visited) {
-        // building array to go up, right, down and left respectively
-        int row[] = {-1, 0, +1, 0};
-        int col[] = {0, +1, 0, -1};
-        int maxTime = 0;
-
-        while(!q.empty()) {
-            auto frontNode = q.front();
-            q.pop();
-            int r = frontNode.first.first;   // stores the row
-            int c = frontNode.first.second;  // stores the col
-            int t = frontNode.second;        // stores the time to be rottened
-            maxTime = max(t, maxTime);       // each time maximizing the maxTime
-
-            for(int i=0; i<4; i++) {         // as there are four neighbours possible up, right, down and left 
-                int newRow = r + row[i];     
-                int newCol = c + col[i];
-
-                if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1 && visited[newRow][newCol] == 0) {
-                    grid[newRow][newCol] = 2;         // marking this orange as rotten
-                    visited[newRow][newCol] = 1;      // marking this cell to be visited
-                    q.push({{newRow, newCol}, t+1});  // pushing this rotten cells position and its rotting time
-                }
-            }
-        }
-
-        // checking if there is still any fresh orange remaining : 
-        for(int i=0; i<n; i++) {
-            for(int j=0; j<m; j++) {
-                if(grid[i][j] == 1) return -1;    // if yes then return -1
-            }
-        }
-
-        return maxTime;  // else return the maxTime
-    }
-
 public:
-    int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();    // row size
-        int m = grid[0].size(); // col size
-        vector<vector<int>> visited(n, vector<int>(m,0));  // same dimensions as the the grid to track the visit to a particular cell
-        queue<pair<pair<int,int>, int>> q;                 // stores row, col and time
+    int orangesRotting(vector<vector<int>>& mat) {
+        int n = mat.size();               // Number of rows
+        int m = mat[0].size();            // Number of columns
 
-        // initializing the queue and the visited array :
-        for(int i=0; i<n; i++) {
-            for(int j=0; j<m; j++) {
-                if(grid[i][j] == 2) {         // if the orange is rotten
-                    visited[i][j] = 1;        // then mark it as visited
-                    q.push({{i,j},0});        // also stores its position with rotting time as 0
+        // Visited array to keep track of already processed cells
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+
+        queue<pair<int,int>> q;           // Queue to perform BFS
+        int reqTime = 0;                  // Time required to rot all oranges
+        int freshCnt = 0;                 // Count of fresh oranges
+        int newRotten = 0;                // Count of fresh oranges that got rotten during BFS
+
+        // Step 1: Count fresh oranges and enqueue all initially rotten oranges
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++) {
+                if(mat[i][j] == 1)
+                    freshCnt++;           // Count fresh orange
+                else if(mat[i][j] == 2) {
+                    vis[i][j] = 1;        // Mark as visited
+                    q.push({i, j});       // Push initial rotten oranges to queue
                 }
             }
-        } 
+        }
 
-        // call the bfs helper function : 
-        int time = bfsHelper(n,m,grid,q,visited);
-        return time;
+        // Directions for 4-connected neighbours (up, right, down, left)
+        int dRow[] = {-1, 0, 1, 0};
+        int dCol[] = {0, 1, 0, -1};
+
+        // Step 2: BFS to rot adjacent fresh oranges level by level (minute by minute)
+        while(!q.empty()) {
+            int size = q.size(); 
+            bool didRot = false;          // To check if any orange rotted in this round
+
+            for (int i = 0; i < size; i++) {
+                int currRow = q.front().first;
+                int currCol = q.front().second;
+                q.pop();
+
+                // Check all 4 neighbours
+                for(int k = 0; k < 4; k++) {
+                    int newRow = currRow + dRow[k];
+                    int newCol = currCol + dCol[k];
+
+                    // If within bounds and unvisited fresh orange
+                    if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m
+                       && !vis[newRow][newCol] && mat[newRow][newCol] == 1) {
+
+                        vis[newRow][newCol] = 1;        // Mark it as visited
+                        mat[newRow][newCol] = 2;        // Rot the orange
+                        q.push({newRow, newCol});       // Add to queue for next round
+                        newRotten++;                    // Count it
+                        didRot = true;                  // Mark that we did rot at least one
+                    }
+                }
+            }
+
+            // If we rotted any orange in this level, increment time
+            if(didRot)
+                reqTime++;
+        }
+
+        // Step 3: If all fresh oranges got rotten, return time; else return -1
+        return (freshCnt == newRotten) ? reqTime : -1;
     }
 };
