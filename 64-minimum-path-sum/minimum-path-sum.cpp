@@ -41,6 +41,26 @@ private:
         return dp[n][m];
     }
 
+    // Optimal DP : Space Optimization : 
+    int spaceOptimization(int n, int m, vector<vector<int>>& grid) {
+        if(n==0 && m==0) return grid[0][0];
+        vector<int> prev(m+1, 0);
+        for(int i=0; i<=n; i++) {
+            vector<int> curr(m+1, 0);
+            for(int j=0; j<=m; j++) {
+                if(i==0 && j==0) {
+                    curr[0] = grid[0][0];
+                    continue;
+                }
+                int down = (i>0) ? prev[j] : INT_MAX;
+                int right = (j>0) ? curr[j-1] : INT_MAX;
+                curr[j] = grid[i][j] + min(down, right); 
+            }
+            prev = curr;
+        }
+        return prev[m];
+    }
+
 
 public:
     int minPathSum(vector<vector<int>>& grid) {
@@ -52,7 +72,9 @@ public:
         // vector<vector<int>> dp(n+1, vector<int>(m+1, -1));
         // ans = memorization(n, m, grid, dp);
 
-        ans = tabulation(n, m, grid);
+        // ans = tabulation(n, m, grid);
+
+        ans = spaceOptimization(n, m, grid);
         return ans;
     }
 };
