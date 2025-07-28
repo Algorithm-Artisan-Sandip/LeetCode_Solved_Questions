@@ -102,11 +102,11 @@ int uniquePathsWithObstacles(vector<vector<int>>& grid) {
         // return recursive(n - 1, m - 1, grid);
 
         // 2. Memoization
-        vector<vector<int>> dp(n, vector<int>(m, -1));
-        return memoization(n - 1, m - 1, dp, grid);
+        // vector<vector<int>> dp(n, vector<int>(m, -1));
+        // return memoization(n - 1, m - 1, dp, grid);
 
         // 3. Tabulation
-        // return tabulation(n - 1, m - 1, grid);
+        return tabulation(n - 1, m - 1, grid);
 
         // 4. Space Optimized
         // return spaceOptimized(n - 1, m - 1, grid);
