@@ -106,9 +106,9 @@ public:
         // return memoization(n, m, dp);
 
         // 3. Tabulation
-        return tabulation(n, m);
+        // return tabulation(n, m);
 
         // 4. Space Optimized DP
-        // return spaceOptimized(n, m);
+        return spaceOptimized(n, m);
     }
 };
