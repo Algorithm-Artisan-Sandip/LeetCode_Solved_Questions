@@ -99,14 +99,14 @@ public:
         // return res;
 
         // 2) Memoization:
-        vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
-        int res = INT_MAX;
-        for (int j = 0; j < m; ++j)
-            res = min(res, dfsMemo(0, j, n, m, matrix, dp));
-        return res;
+        // vector<vector<int>> dp(n, vector<int>(m, INT_MAX));
+        // int res = INT_MAX;
+        // for (int j = 0; j < m; ++j)
+        //     res = min(res, dfsMemo(0, j, n, m, matrix, dp));
+        // return res;
 
         // 3) Tabulation:
-        // return tabulation(matrix);
+        return tabulation(matrix);
 
         // 4) Space Optimization:
         // return spaceOptimization(matrix);
