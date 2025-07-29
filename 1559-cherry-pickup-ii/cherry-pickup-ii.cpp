@@ -158,9 +158,9 @@ public:
         // return memorization(0, 0, m - 1, grid, dp);
         
         // Bottom-up tabulation approach
-        return tabulation(0, 0, m-1, grid);
+        // return tabulation(0, 0, m-1, grid);
         
         // Space optimized bottom-up DP
-        // return spaceOptimization(grid);
+        return spaceOptimization(grid);
     }
 };
