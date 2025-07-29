@@ -106,9 +106,9 @@ public:
         // return res;
 
         // 3) Tabulation:
-        return tabulation(matrix);
+        // return tabulation(matrix);
 
         // 4) Space Optimization:
-        // return spaceOptimization(matrix);
+        return spaceOptimization(matrix);
     }
 };
