@@ -1,34 +1,26 @@
 class Solution {
 public:
     int numberOfSpecialChars(string word) {
-        // 0 default value
-        // 69 if caps appear before
-        // 1 if caps appear later
-        // -1 if condition failed
-        vector<int> tracker(26, 0);
+        vector<int> lastLower(26, -1);
+        vector<int> firstUpper(26, -1);
         int specialCnt = 0;
-        for(size_t i = 0; i<word.size(); i++) {
-            if(word[i] >= 97 && word[i] <= 122) {
-                if(tracker[word[i]-'a'] == 0) {
-                    tracker[word[i]-'a'] = 1;
-                }
-                else if(tracker[word[i]-'a'] == 69) {
-                    tracker[word[i]-'a'] = -1;
-                }
+        // populate lastLower and firstUpper : 
+        for(size_t i=0; i<word.size(); i++) {
+            if(islower(word[i])) {
+                lastLower[word[i]-'a'] = i;
             }
-            else if(word[i] >= 65 && word[i] <= 90) {
-                if(tracker[word[i]-'A'] == 0) {
-                    tracker[word[i]-'A'] = -1;
-                }
-                if(tracker[word[i]-'A'] == 1) {
-                    tracker[word[i]-'A'] = 69;
+            else {
+                if(firstUpper[word[i] - 'A'] == -1) {
+                    firstUpper[word[i]-'A'] = i;
                 }
             }
         }
-        for(auto nums : tracker) {
-            if(nums == 69) specialCnt++;
+        // now find the special letters : 
+        for(int i=0; i<26; i++) {
+            if(lastLower[i] != -1 && firstUpper[i] != -1 && lastLower[i] < firstUpper[i]) {
+                specialCnt++;
+            }
         }
         return specialCnt;
-
     }
 };
